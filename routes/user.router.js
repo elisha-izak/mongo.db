@@ -23,10 +23,20 @@ router.get('/:id', (req, res) => {
     res.send(req.params.id);
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     console.log('fsdgg');
-    useService.createNewUser(req.body);
+    await useService.createNewUser(req.body);
     res.send('ok');
+})
+
+router.post('/login', async (req, res) => {
+    try{
+    let result =  await useService.loginUser(req.body);
+    res.send(result);
+    }
+    catch(err){
+        res.status(401).send(err);
+    }
 })
 
 

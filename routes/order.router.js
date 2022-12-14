@@ -1,17 +1,20 @@
 const express = require('express');
-
 const router = express.Router();
+const ordService = require('../BL/order.service')
 
-router.get('/', (req, res) => {
-    res.send({name: 'moshe', aga: 2});
+router.get('/', async (req, res) => {
+    const orders =  await ordService.getAllOrder()
+    res.send(orders);
 })
 
-router.get('/:id', (req, res) => {
-    res.send(req.params.id);
+router.get('/use/:id', async (req, res) => {
+    const ordUser =  await ordService.getOrdUser(req.params.id)
+    res.send(ordUser);
 })
 
-router.post('/', (req, res) => {
-
+router.post('/', async (req, res) => {
+    await ordService.createOrder(req.body)
+    res.send('ok');
 })
 
 

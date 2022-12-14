@@ -15,8 +15,8 @@ async function create(data) {
     return await productData.create(data);
 }
  
-async function read(filter, specificField) {
-    return await productData.find(filter, specificField);
+async function read(filter) {
+    return await productData.find(filter);
 }
 
 async function updateMany(ProductId, newData) {
