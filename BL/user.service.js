@@ -5,13 +5,17 @@ const bcrypt = require('bcrypt');
 const { create } = require('../DL/MODEL/user.model');
 const auth = require('../auth');
 
+
 async function createNewUser(data) {
     if(!data.email || !data.password) throw "missing data"
 
-    let useMail = await userDL.readOne({email : data.email});
-    if(useMail) throw "user is exist"
-    let usePass = await userDL.readOne({password : data.password});
-    if(usePass) throw "user is exist"
+    let user = await userDL.readOne({email : data.email});
+    if(user) throw "user is exist"
+
+    let passhash = await bcrypt.hash(data.password, 10)
+    console.log(passhash);
+    
+    data.password = passhash;
 
     let res = await userDL.create(data);
     console.log(res)
@@ -19,19 +23,36 @@ async function createNewUser(data) {
 }
 
 
+
+async function getAllUsers(){
+    let users = userDL.read({})
+    console.log(users);
+    return users
+}
+
+
 async function loginUser(data) {
 
-
-
-    let user = await userDL.readOne({email : data.email,
-                                     password : data.password});
-                                     
+    let user = await userDL.readOne({email: data.email}, '+password');
     if(!user) throw "user is NOT exist"
     console.log(user);
-    let token = auth.createToken(data.email)
+
+    let passValid = await bcrypt.compare(data.password, user.password)
     
+    console.log('passValid '+ passValid);
+    
+    if(passValid) {
+     let token = auth.createToken(user._id)
     return token;
 }
+throw 'not valid'
+}
+
+
+
+
+
+
 
 
 
@@ -48,4 +69,4 @@ async function loginUser(data) {
 // createNewUser(user);
 
 
-module.exports = {createNewUser, loginUser}
+module.exports = {createNewUser, getAllUsers, loginUser}

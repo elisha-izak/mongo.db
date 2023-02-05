@@ -24,7 +24,7 @@ async function updateMany(orderId, newData) {
 }
 
 async function del(orderId) {
-    return update(orderId, { isActive: false });
+    return  updateMany(orderId, { isActive: false });
 }
 
 module.exports = { del, updateOne, updateMany, read, create }

@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 require('./DL/DB/db').connect()
 const cors = require('cors');
-const { application } = require('express');
 const mainRouter = require('./routes/main.router');
 const PORT = process.env.PORT || 1234;
 

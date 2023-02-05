@@ -1,4 +1,5 @@
-const productData = require('../MODEL/product.model') 
+const productData = require('../MODEL/product.model'); 
+const { update } = require('./user.controller');
 
 
 // const product = {
@@ -26,5 +27,8 @@ async function updateMany(ProductId, newData) {
 async function del(ProductId) {
     return update(ProductId, {isActive : false});
 }
+
+
+
 
 module.exports = {del, updateMany, read, create}

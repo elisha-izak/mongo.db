@@ -3,11 +3,26 @@ const SECRET = process.env.SECRET;
 
 
 function createToken(data){
-console.log(data);
-    const jjj =  jwt.sign({data},SECRET,{expiresIn: '2d'})
-    console.log(jjj);
-    return jjj;
+
+    const token =  jwt.sign({data},SECRET,{expiresIn: '2d'})
+    console.log(token);
+    return token;
 }
 
 
-module.exports = {createToken}
+function validToken(req, res, next) {
+    try{
+    data = req.headers.authorization.replace('bearer ','')
+
+    const token = jwt.verify(data,SECRET)
+    req.token = token;
+    console.log(token);
+    next()
+    }
+    catch(e){
+        res.status(403).send('token not valid')
+    } 
+}
+
+
+module.exports = {createToken, validToken}
